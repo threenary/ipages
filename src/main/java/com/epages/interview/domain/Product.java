@@ -28,7 +28,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "product")
-public class Product
+public class Product implements Comparable<Product>
 {
 
     @Id
@@ -52,4 +52,22 @@ public class Product
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
+
+    @Override
+    public String toString()
+    {
+        return "Product [name=" + name + ", brand=" + getBrand().getName()
+            + ", price=" + getPrice() + "]";
+    }
+
+    @Override
+    public int compareTo(final Product otherProduct)
+    {
+        if (brand.equals(otherProduct.getBrand()))
+        {
+            return price.compareTo(otherProduct.getPrice());
+        }
+        return brand.compareTo(otherProduct.getBrand());
+    }
 }
+

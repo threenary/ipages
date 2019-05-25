@@ -26,7 +26,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "brand")
-public class Brand
+public class Brand implements Comparable<Brand>
 {
     @OneToMany(mappedBy = "brand")
     List<Product> products;
@@ -37,4 +37,16 @@ public class Brand
     @NotNull(message = "Brand should have a name")
     @Column(nullable = false)
     private String name;
+
+    @Override
+    public String toString()
+    {
+        return "Brand [name=" + name + "]";
+    }
+
+    @Override
+    public int compareTo(final Brand otherBrand)
+    {
+        return name.compareTo(otherBrand.getName());
+    }
 }
