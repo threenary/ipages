@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @ApiModel(
     value = "ProductRest",
-    description = "A Product REST representation."
+    description = "A Product REST representation.</br>"
 )
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductRest
