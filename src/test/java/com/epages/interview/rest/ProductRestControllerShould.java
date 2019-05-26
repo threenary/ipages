@@ -1,9 +1,13 @@
 package com.epages.interview.rest;
 
+import static com.epages.interview.infra.error.ApiErrorEnum.METHOD_NOT_SUPPORTED;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -140,6 +144,18 @@ public class ProductRestControllerShould
             .andExpect(status().isOk())
             .andExpect(content().string(expectedContent));
         verify(productService, times(1)).getAllProductsWithOrder();
+    }
+
+    @Test
+    public void returnMethodNowSupported() throws Exception
+    {
+        // given a post request // when // then
+        mvc.perform(post(buildUri(RESOURCE_SORTED))
+            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(status().isMethodNotAllowed())
+            .andExpect(content().string(containsString(METHOD_NOT_SUPPORTED.getErrorDescription("POST"))));
+
+        verifyZeroInteractions(productService);
     }
 
     private String buildUri(final String path)
