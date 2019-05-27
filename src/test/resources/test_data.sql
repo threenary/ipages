@@ -19,6 +19,8 @@ insert into brand (id, name) values (brand_seq.nextval, 'Volkswagen');
   - Porsche     3 Products / 1 On Sale
   - Opel        0 Products
   - Volkswagen  4 Products / 3 On Sale
+
+  TOTAL: 15 Products
  */
 
 /**
