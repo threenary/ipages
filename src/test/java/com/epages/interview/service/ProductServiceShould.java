@@ -84,7 +84,7 @@ public class ProductServiceShould
     }
 
     @Test
-    public void returnAllProductsSortedInMemoryTest()
+    public void returnAllProductsSortedInMemory()
     {
         //given
         final Product mustang = Product.builder().name("Mustang").brand(FORD).onSale(true).price(BigDecimal.valueOf(10000)).build();
@@ -106,7 +106,7 @@ public class ProductServiceShould
     }
 
     @Test
-    public void returnAllProductsSortedJpaSpecificationTest()
+    public void returnAllProductsSortedJpaSpecification()
     {
         //given
         final Product mustang = Product.builder().name("Mustang").brand(FORD).onSale(true).price(BigDecimal.valueOf(10000)).build();

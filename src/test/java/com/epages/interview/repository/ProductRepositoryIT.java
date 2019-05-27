@@ -36,7 +36,7 @@ public class ProductRepositoryIT
     }
 
     @Test
-    public void getAllProductsTest()
+    public void getAllProducts()
     {
         List<Product> products = testSubject.findAll();
 
@@ -46,7 +46,7 @@ public class ProductRepositoryIT
     }
 
     @Test
-    public void getAllProductsWithSpecificationTest()
+    public void getAllProductsWithSpecification()
     {
         List<Product> products = testSubject.findAll(ProductSpecification.sortedByBrandAndPrice());
 

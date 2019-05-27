@@ -49,24 +49,33 @@ public class ProductRestController
     })
     public Map<String, List<ProductRest>> listProducts()
     {
-        final List<Product> sortedProducts = productService.getAllProducts();
-
-        return mapToBizz(sortedProducts);
+        return mapToBizz(productService.getAllProducts());
     }
 
-    @GetMapping("/sorted")
+    @GetMapping("/sortedInMemory")
     @ApiOperation(
-        value = "Returns all the Products in the inventory with the requested order")
+        value = "Returns all the Products in the inventory grouped by brand, sorted alphabetically and ascending by price")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "All the products grouped by brand, sorted alphabetically and ascending by price"),
         @ApiResponse(code = 400, message = "Bad Request."),
         @ApiResponse(code = 405, message = "Method Not Allowed.")
     })
-    public Map<String, List<ProductRest>> listProductsSorted()
+    public Map<String, List<ProductRest>> listSortedInMemoryProducts()
     {
-        final List<Product> sortedProducts = productService.getAllProductsWithOrder();
+        return mapToBizz(productService.getAllProductsWithOrder());
+    }
 
-        return mapToBizz(sortedProducts);
+    @GetMapping("/sortedBySpecification")
+    @ApiOperation(
+        value = "Returns all the Products in the inventory grouped by brand, sorted alphabetically and ascending by price")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "All the products grouped by brand, sorted alphabetically and ascending by price"),
+        @ApiResponse(code = 400, message = "Bad Request."),
+        @ApiResponse(code = 405, message = "Method Not Allowed.")
+    })
+    public Map<String, List<ProductRest>> listSortedJpaSpecificationProducts()
+    {
+        return mapToBizz(productService.getAllProductsWithSpecification());
     }
 
     /**

@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import com.epages.interview.domain.Brand;
 import com.epages.interview.domain.Product;
 import com.epages.interview.rest.utils.EventType;
 import com.epages.interview.service.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -41,7 +43,8 @@ public class ProductRestControllerShould
 {
     private final static String PRODUCTS_URI = "/products";
     private final static String RESOURCE_ALL = "/all";
-    private final static String RESOURCE_SORTED = "/sorted";
+    private final static String RESOURCE_SORTED_IN_MEMORY = "/sortedInMemory";
+    private final static String RESOURCE_SORTED_BY_SPECIFICATION = "/sortedBySpecification";
     private final static Brand HONDA = Brand.builder().name("Honda").build();
     private final static Brand MITSUBISHI = Brand.builder().name("Mitsubishi").build();
     private final static Brand MERCEDES = Brand.builder().name("Mercedes").build();
@@ -118,9 +121,35 @@ public class ProductRestControllerShould
     }
 
     @Test
-    public void returnAllProductsSorted() throws Exception
+    public void returnAllProductsSortedInMemory() throws Exception
     {
         //given
+        final String expectedContent = prepareDataSet(RESOURCE_SORTED_IN_MEMORY);
+
+        //when // then
+        mvc.perform(get(buildUri(RESOURCE_SORTED_IN_MEMORY))
+            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().string(expectedContent));
+        verify(productService, times(1)).getAllProductsWithOrder();
+    }
+
+    @Test
+    public void returnAllProductsSortedBySpecification() throws Exception
+    {
+        //given
+        final String expectedContent = prepareDataSet(RESOURCE_SORTED_BY_SPECIFICATION);
+
+        //when // then
+        mvc.perform(get(buildUri(RESOURCE_SORTED_BY_SPECIFICATION))
+            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().string(expectedContent));
+        verify(productService, times(1)).getAllProductsWithSpecification();
+    }
+
+    private String prepareDataSet(final String resource) throws JsonProcessingException
+    {
         final Product civic = Product.builder().name("Civic").brand(HONDA).price(BigDecimal.valueOf(15000L)).onSale(false).id(civicID).build();
         final Product city = Product.builder().name("City").brand(HONDA).price(BigDecimal.valueOf(800L)).onSale(true).id(cityID).build();
         final Product aClass = Product.builder().name("aClass").brand(MERCEDES).price(BigDecimal.valueOf(25000L)).onSale(true).id(aClassID).build();
@@ -130,27 +159,27 @@ public class ProductRestControllerShould
         final List<Product> inventory = Arrays.asList(civic, city, eclipse, aClass, bus);
         inventory.sort(Comparator.naturalOrder());
 
-        when(productService.getAllProductsWithOrder()).thenReturn(inventory);
+        if (RESOURCE_SORTED_IN_MEMORY.equals(resource))
+        {
+            when(productService.getAllProductsWithOrder()).thenReturn(inventory);
+        }
+        else
+        {
+            when(productService.getAllProductsWithSpecification()).thenReturn(inventory);
+        }
 
         final Map<String, List<ProductRest>> expectedResult = new LinkedHashMap<>();
         expectedResult.put(HONDA.getName(), Arrays.asList(buildRestProduct(city), buildRestProduct(civic)));
         expectedResult.put(MERCEDES.getName(), Arrays.asList(buildRestProduct(aClass), buildRestProduct(bus)));
-        expectedResult.put(MITSUBISHI.getName(), Arrays.asList(buildRestProduct(eclipse)));
-        final String expectedContent = objectMapper.writeValueAsString(expectedResult);
-
-        //when // then
-        mvc.perform(get(buildUri(RESOURCE_SORTED))
-            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(status().isOk())
-            .andExpect(content().string(expectedContent));
-        verify(productService, times(1)).getAllProductsWithOrder();
+        expectedResult.put(MITSUBISHI.getName(), Collections.singletonList(buildRestProduct(eclipse)));
+        return objectMapper.writeValueAsString(expectedResult);
     }
 
     @Test
     public void returnMethodNowSupported() throws Exception
     {
         // given a post request // when // then
-        mvc.perform(post(buildUri(RESOURCE_SORTED))
+        mvc.perform(post(buildUri(RESOURCE_SORTED_IN_MEMORY))
             .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().string(containsString(METHOD_NOT_SUPPORTED.getErrorDescription("POST"))));
