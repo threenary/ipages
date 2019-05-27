@@ -79,3 +79,44 @@ Feel free to come up with more ideas on how to improve the service from technica
 
 ## Submit Your Work
 Please create a zip file of your solution and send it back to [Serena](mailto:s.tansil@epages.com). We will look at it and further discuss your solution together.
+
+# Resolution Notes
+
+## Technical Approach
+Benefited from the usage of __Spring Boot__ that provided the core infrastructure for a cloud ready service.
+With the usage of JPA and Hibernate I achieved the querying facilities, using a __H2__ embedded storage for it's simplicity.
+Provided __Swagger UI__ for easy use of the REST API for documentation purposes and it's easy to use features.
+
+
+## Solution Specification
+
+Decided to go for two approaches, which I called In Memory Approach and By JPA Approach.
+ 
+__In Memory__ since the requirement is to grab all the existing products, I decided to filter an grouping them directly
+once they are loaded in memory, using the benefits of the Stream API
+
+__By JPA Specification__ came after since I wanted to test the performance, at least by curiosity, and seemed also
+a possible approach, using the Specification API provided by JPA, this is something I had never used before and wanted 
+to try it out.
+
+Results (without a comprehensive benchmarking), seems faster with the first approach, although this should be tested with a
+higher amount of Products.
+
+## Additional considerations
+
+- Default Port ```8090```
+- H2 console ```http://localhost:8090/h2-console``` 
+- SwaggerUI ```http://localhost:8090/swagger-ui.html```
+
+Defaults can be changed in /src/main/resources/application.yml
+
+## Execution
+
+Please take into account this is not a self executable jar, although it benefits from __Gradlew__ Application plugin, 
+thus there is a script that can be used to run the application:
+
+```./run.sh```
+
+
+ 
+ 
