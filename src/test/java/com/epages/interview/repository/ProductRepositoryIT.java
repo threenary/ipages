@@ -1,20 +1,22 @@
 package com.epages.interview.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.epages.interview.domain.Product;
 import com.epages.interview.repo.ProductRepository;
+import com.epages.interview.repo.ProductSpecification;
 
 
 @DataJpaTest
@@ -22,17 +24,34 @@ import com.epages.interview.repo.ProductRepository;
 @TestPropertySource(properties = {"spring.datasource.data=test_data.sql"})
 public class ProductRepositoryIT
 {
+    private static final int DBSIZE = 15;
+    
     @Autowired
     private ProductRepository testSubject;
-    @Autowired
-    private TestEntityManager entityManager;
+
+    @Before
+    public void setUp()
+    {
+
+    }
 
     @Test
-    public void getAllAvailableProductsTest()
+    public void getAllProductsTest()
     {
         List<Product> products = testSubject.findAll();
 
         assertNotNull(products);
         assertFalse(products.isEmpty());
+        assertEquals(DBSIZE, products.size());
+    }
+
+    @Test
+    public void getAllProductsWithSpecificationTest()
+    {
+        List<Product> products = testSubject.findAll(ProductSpecification.sortedByBrandAndPrice());
+
+        assertNotNull(products);
+        assertFalse(products.isEmpty());
+        assertEquals(DBSIZE, products.size());
     }
 }
