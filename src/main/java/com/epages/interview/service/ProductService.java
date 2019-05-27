@@ -15,11 +15,23 @@ public interface ProductService
     List<Product> getAllProducts();
 
     /**
+     * IN MEMORY SORTING approach
+     *
      * Returns all the Products in the inventory with the requested order
      *  - Products are grouped by `brand`, sorted alphabetically
      *  - Products inside a `brand` should be sorted ascending by `price`
      * @return a {@link List} of {@link Product}
      */
     List<Product> getAllProductsWithOrder();
+
+    /**
+     * JPA SPECIFICATION approach
+     *
+     * Returns all the Products in the inventory with the requested order
+     *  - Products are grouped by `brand`, sorted alphabetically
+     *  - Products inside a `brand` should be sorted ascending by `price`
+     * @return a {@link List} of {@link Product}
+     */
+    List<Product> getAllProductsWithSpecification();
 
 }

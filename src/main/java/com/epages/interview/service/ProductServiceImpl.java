@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.epages.interview.domain.Product;
 import com.epages.interview.repo.ProductRepository;
+import com.epages.interview.repo.ProductSpecification;
 
 
 @Service
@@ -34,5 +35,11 @@ public class ProductServiceImpl implements ProductService
         products.sort(Comparator.naturalOrder());
 
         return products;
+    }
+
+    @Override
+    public List<Product> getAllProductsWithSpecification()
+    {
+        return repository.findAll(ProductSpecification.sortedByBrandAndPrice());
     }
 }

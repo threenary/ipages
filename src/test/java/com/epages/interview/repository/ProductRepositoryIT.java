@@ -25,7 +25,7 @@ import com.epages.interview.repo.ProductSpecification;
 public class ProductRepositoryIT
 {
     private static final int DBSIZE = 15;
-    
+
     @Autowired
     private ProductRepository testSubject;
 
