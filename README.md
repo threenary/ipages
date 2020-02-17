@@ -1,8 +1,6 @@
-# Welcome!
+#iPages
 
-Thank you for taking your time to implement a little coding challenge for us. Spending 4-5 hours on implementing the requirement will help us get a feeling of how you code and approach new requirements. 
-
-# Requirement
+## Requirement
 
 Our microservice architecture has a service to create and manage products. We now would like to add another microservice that offers search and filter capabilities for products. To quickly provide a working endpoint to our frontend team, we agreed on the following details.
 
@@ -76,9 +74,6 @@ However **we suggest you to use the tools and technologies you are comfortable w
 
 ## Freedom to Extend
 Feel free to come up with more ideas on how to improve the service from technical or business perspective, if there is still time left.
-
-## Submit Your Work
-Please create a zip file of your solution and send it back to [Serena](mailto:s.tansil@epages.com). We will look at it and further discuss your solution together.
 
 # Resolution Notes
 
